@@ -1,6 +1,8 @@
 package log
 
-import "github.com/pkg/errors"
+import (
+	"fmt"
+)
 
 const (
 	TRACE LogLevel = iota + 1
@@ -27,7 +29,7 @@ type LogLevel int
 func ParseLevelFromString(lvl string) (l LogLevel, err error) {
 	v, ok := supportedLevelsLookupTable[lvl]
 	if !ok {
-		return l, errors.Errorf("unsupported log level: %s", lvl)
+		return l, fmt.Errorf("unsupported log level: %s", lvl)
 	}
 
 	return v, nil
