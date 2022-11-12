@@ -37,6 +37,11 @@ func FindMinimumHops(start, target models.Coordinate, grid *models.Grid) (hopCou
 				Y: temp.CurrentPosition.Y + v.YVelocity,
 			}
 
+			// the hopper cannot move if both velocities are zero
+			if nextPosition.X == 0 && nextPosition.Y == 0 {
+				continue
+			}
+
 			if grid.IsInside(nextPosition) && !grid.IsBlocked(nextPosition) {
 				hq.Enqueue(models.Hop{
 					CurrentPosition: nextPosition,

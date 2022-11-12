@@ -14,19 +14,21 @@ type Obstacles struct {
 }
 
 // NewGrid : returns a new grid with given length, width and defined obstacles
-func NewGrid(length, width int, obstacles Obstacles) *Grid {
+func NewGrid(length, width int, obstacles []Obstacles) *Grid {
 	grid := new(Grid)
 	grid.length = length
 	grid.width = width
 	grid.obstacles = make(map[int]map[int]bool)
 
-	for i := obstacles.X1; i <= obstacles.X2; i++ {
-		for j := obstacles.Y1; j <= obstacles.Y2; j++ {
-			if _, ok := grid.obstacles[i]; !ok {
-				grid.obstacles[i] = make(map[int]bool)
-			}
+	for _, obs := range obstacles {
+		for i := obs.X1; i <= obs.X2; i++ {
+			for j := obs.Y1; j <= obs.Y2; j++ {
+				if _, ok := grid.obstacles[i]; !ok {
+					grid.obstacles[i] = make(map[int]bool)
+				}
 
-			grid.obstacles[i][j] = true
+				grid.obstacles[i][j] = true
+			}
 		}
 	}
 
