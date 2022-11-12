@@ -2,9 +2,10 @@ package output
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
-	"github.com/wishperera/race-tracks/log"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/wishperera/race-tracks/internal/pkg/log"
 )
 
 func TestWriter_WriteOutput(t *testing.T) {

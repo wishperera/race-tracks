@@ -3,33 +3,32 @@ package input
 import (
 	"bufio"
 	"errors"
-	"github.com/wishperera/race-tracks/log"
-	"github.com/wishperera/race-tracks/models"
 	"io"
 	"strconv"
 	"strings"
+
+	models2 "github.com/wishperera/race-tracks/internal/models"
+	"github.com/wishperera/race-tracks/internal/pkg/log"
 )
 
-var (
-	invalidFileFormatErr = errors.New("invalid input file format")
-)
+var errInvalidFileFormat = errors.New("invalid input file format")
 
 type Reader struct {
 	log log.Logger
 }
 
-func NewProvider(log log.Logger) (*Reader, error) {
-	if log == nil {
+func NewReader(logger log.Logger) (*Reader, error) {
+	if logger == nil {
 		return nil, errors.New("param log cannot be empty")
 	}
 
 	return &Reader{
-		log: log,
+		log: logger,
 	}, nil
 }
 
 // ReadInput : reads the input from a given io.Reader
-func (p *Reader) ReadInput(reader io.Reader) (input []models.Input, err error) {
+func (p *Reader) ReadInput(reader io.Reader) (input []models2.Input, err error) {
 	fileScanner := bufio.NewScanner(reader)
 	fileScanner.Split(bufio.ScanLines)
 	var fileLines []string
@@ -41,12 +40,12 @@ func (p *Reader) ReadInput(reader io.Reader) (input []models.Input, err error) {
 	return p.sanitizeInput(fileLines)
 }
 
-func (p *Reader) sanitizeInput(lines []string) (input []models.Input, err error) {
-	input = make([]models.Input, 0)
+func (p *Reader) sanitizeInput(lines []string) (input []models2.Input, err error) {
+	input = make([]models2.Input, 0)
 
-	if len(lines) < 4 {
+	if len(lines) < 4 { //nolint:gomnd //minor
 		p.log.Error("Insufficient lines of input")
-		return nil, invalidFileFormatErr
+		return nil, errInvalidFileFormat
 	}
 
 	// trim spaces
@@ -57,7 +56,7 @@ func (p *Reader) sanitizeInput(lines []string) (input []models.Input, err error)
 	numberOfTestCases, err := strconv.Atoi(lines[0])
 	if err != nil {
 		p.log.ErrorF("Failed to read number of test cases due: %s", err)
-		return nil, invalidFileFormatErr
+		return nil, errInvalidFileFormat
 	}
 
 	currentIndex := 1
@@ -75,10 +74,10 @@ func (p *Reader) sanitizeInput(lines []string) (input []models.Input, err error)
 		numberOfObstacles, err := strconv.Atoi(lines[currentIndex+2])
 		if err != nil {
 			p.log.ErrorF("Failed to read number of obstacles for test case: %d due: %s", n+1, err)
-			return nil, invalidFileFormatErr
+			return nil, errInvalidFileFormat
 		}
 
-		obstacles := make([]models.Obstacles, 0)
+		obstacles := make([]models2.Obstacles, 0)
 
 		var j int
 		for j = currentIndex + 3; j < currentIndex+3+numberOfObstacles; j++ {
@@ -90,7 +89,7 @@ func (p *Reader) sanitizeInput(lines []string) (input []models.Input, err error)
 			obstacles = append(obstacles, obs)
 		}
 
-		input = append(input, models.Input{
+		input = append(input, models2.Input{
 			GridLength: gridLength,
 			GridWidth:  gridWidth,
 			Start:      start,
@@ -108,53 +107,53 @@ func (p *Reader) parseGridSize(testCase int, in string) (length, width int, err 
 	gridSizeStr := strings.Split(in, " ")
 	if len(gridSizeStr) != 2 {
 		p.log.ErrorF("Failed to read grid size for test case: %d", testCase)
-		return length, width, invalidFileFormatErr
+		return length, width, errInvalidFileFormat
 	}
 
 	length, err = strconv.Atoi(gridSizeStr[0])
 	if err != nil {
 		p.log.ErrorF("Failed to read grid length for test case: %d due: %s", testCase, err)
-		return length, width, invalidFileFormatErr
+		return length, width, errInvalidFileFormat
 	}
 
 	width, err = strconv.Atoi(gridSizeStr[1])
 	if err != nil {
 		p.log.ErrorF("Failed to read grid width for test case: %d due: %s", testCase, err)
-		return length, width, invalidFileFormatErr
+		return length, width, errInvalidFileFormat
 	}
 
 	return length, width, nil
 }
 
-func (p *Reader) parseStartEnd(testCase int, in string) (start, end models.Coordinate, err error) {
+func (p *Reader) parseStartEnd(testCase int, in string) (start, end models2.Coordinate, err error) {
 	points := strings.Split(in, " ")
-	if len(points) != 4 {
+	if len(points) != 4 { //nolint:gomnd //minor
 		p.log.ErrorF("Failed to read start/end points for test case: %d", testCase)
-		return start, end, invalidFileFormatErr
+		return start, end, errInvalidFileFormat
 	}
 
 	startX, err := strconv.Atoi(points[0])
 	if err != nil {
 		p.log.ErrorF("Failed to read start point x coordinate for test case: %d due: %s", testCase, err)
-		return start, end, invalidFileFormatErr
+		return start, end, errInvalidFileFormat
 	}
 
 	startY, err := strconv.Atoi(points[1])
 	if err != nil {
 		p.log.ErrorF("Failed to read start point y coordinate for test case: %d due: %s", testCase, err)
-		return start, end, invalidFileFormatErr
+		return start, end, errInvalidFileFormat
 	}
 
 	endX, err := strconv.Atoi(points[2])
 	if err != nil {
 		p.log.ErrorF("Failed to read end point x coordinate for test case: %d due: %s", testCase, err)
-		return start, end, invalidFileFormatErr
+		return start, end, errInvalidFileFormat
 	}
 
 	endY, err := strconv.Atoi(points[3])
 	if err != nil {
 		p.log.ErrorF("Failed to read end point y coordinate for test case: %d due: %s", testCase, err)
-		return start, end, invalidFileFormatErr
+		return start, end, errInvalidFileFormat
 	}
 
 	start.X = startX
@@ -165,35 +164,35 @@ func (p *Reader) parseStartEnd(testCase int, in string) (start, end models.Coord
 	return start, end, nil
 }
 
-func (p *Reader) parseObstacles(testCase, obstacleGroup int, in string) (obs models.Obstacles, err error) {
+func (p *Reader) parseObstacles(testCase, obstacleGroup int, in string) (obs models2.Obstacles, err error) {
 	points := strings.Split(in, " ")
-	if len(points) != 4 {
+	if len(points) != 4 { //nolint:gomnd //minor
 		p.log.ErrorF("Failed to read obstacle margins for test case: %d, obstacle group: %d", testCase, obstacleGroup)
-		return obs, invalidFileFormatErr
+		return obs, errInvalidFileFormat
 	}
 
 	x1, err := strconv.Atoi(points[0])
 	if err != nil {
 		p.log.ErrorF("Failed to read x1 for test case: %d, obstacle group: %d, due: %s", testCase, obstacleGroup, err)
-		return obs, invalidFileFormatErr
+		return obs, errInvalidFileFormat
 	}
 
 	x2, err := strconv.Atoi(points[1])
 	if err != nil {
 		p.log.ErrorF("Failed to read x2 for test case: %d, obstacle group: %d, due: %s", testCase, obstacleGroup, err)
-		return obs, invalidFileFormatErr
+		return obs, errInvalidFileFormat
 	}
 
 	y1, err := strconv.Atoi(points[2])
 	if err != nil {
 		p.log.ErrorF("Failed to read y1 for test case: %d, obstacle group: %d, due: %s", testCase, obstacleGroup, err)
-		return obs, invalidFileFormatErr
+		return obs, errInvalidFileFormat
 	}
 
 	y2, err := strconv.Atoi(points[3])
 	if err != nil {
 		p.log.ErrorF("Failed to read y2 for test case: %d, obstacle group: %d, due: %s", testCase, obstacleGroup, err)
-		return obs, invalidFileFormatErr
+		return obs, errInvalidFileFormat
 	}
 
 	obs.X1 = x1

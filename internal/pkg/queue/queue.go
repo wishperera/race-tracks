@@ -2,7 +2,8 @@ package queue
 
 import (
 	"container/list"
-	"github.com/wishperera/race-tracks/models"
+
+	"github.com/wishperera/race-tracks/internal/models"
 )
 
 type Queue struct {

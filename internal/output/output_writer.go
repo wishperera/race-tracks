@@ -2,13 +2,25 @@ package output
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
-	"github.com/wishperera/race-tracks/log"
 	"io"
+
+	"github.com/wishperera/race-tracks/internal/pkg/log"
 )
 
 type Writer struct {
 	log log.Logger
+}
+
+func NewWriter(logger log.Logger) (w *Writer, err error) {
+	if logger == nil {
+		return nil, errors.New("param log cannot be empty")
+	}
+
+	return &Writer{
+		log: logger,
+	}, nil
 }
 
 func (w *Writer) WriteOutput(results []int, writer io.Writer) (err error) {

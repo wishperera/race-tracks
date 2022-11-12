@@ -33,10 +33,8 @@ func (m *MockOutputFile) Write(p []byte) (n int, err error) {
 	n = 0
 	if c := len(p); c > 0 {
 		for n < c {
-			{
-				m.writeByte(p[n])
-				n++
-			}
+			m.writeByte(p[n])
+			n++
 		}
 	}
 

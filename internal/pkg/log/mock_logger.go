@@ -80,35 +80,35 @@ func (m *MockLogger) DebugF(formatString string, params ...interface{}) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
-	m.debug = append(m.trace, fmt.Sprintf(formatString, params...))
+	m.debug = append(m.debug, fmt.Sprintf(formatString, params...))
 }
 
 func (m *MockLogger) InfoF(formatString string, params ...interface{}) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
-	m.info = append(m.trace, fmt.Sprintf(formatString, params...))
+	m.info = append(m.info, fmt.Sprintf(formatString, params...))
 }
 
 func (m *MockLogger) WarnF(formatString string, params ...interface{}) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
-	m.warn = append(m.trace, fmt.Sprintf(formatString, params...))
+	m.warn = append(m.warn, fmt.Sprintf(formatString, params...))
 }
 
 func (m *MockLogger) ErrorF(formatString string, params ...interface{}) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
-	m.error = append(m.trace, fmt.Sprintf(formatString, params...))
+	m.error = append(m.error, fmt.Sprintf(formatString, params...))
 }
 
 func (m *MockLogger) FatalF(formatString string, params ...interface{}) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
-	m.fatal = append(m.trace, fmt.Sprintf(formatString, params...))
+	m.fatal = append(m.fatal, fmt.Sprintf(formatString, params...))
 }
 
 func (m *MockLogger) TraceLogs() []string {

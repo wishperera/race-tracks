@@ -1,14 +1,15 @@
 package input
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/wishperera/race-tracks/log"
-	"github.com/wishperera/race-tracks/models"
 	"io"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	models2 "github.com/wishperera/race-tracks/internal/models"
+	"github.com/wishperera/race-tracks/internal/pkg/log"
 )
 
-func TestProvider_ReadInput(t *testing.T) {
+func TestProvider_ReadInput(t *testing.T) { //nolint:funlen //minor
 	type fields struct {
 		log *log.MockLogger
 	}
@@ -19,7 +20,7 @@ func TestProvider_ReadInput(t *testing.T) {
 		name          string
 		fields        fields
 		args          args
-		wantInput     []models.Input
+		wantInput     []models2.Input
 		wantErrorLogs []string
 		wantErr       string
 	}{
@@ -31,34 +32,34 @@ func TestProvider_ReadInput(t *testing.T) {
 			args: args{
 				reader: NewMockFile("2\n5 5\n4 0 4 4\n1\n1 4 2 3\n3 3\n0 0 2 2\n2\n1 1 0 2\n0 2 1 1"),
 			},
-			wantInput: []models.Input{
+			wantInput: []models2.Input{
 				{
 					GridLength: 5,
 					GridWidth:  5,
-					Start: models.Coordinate{
+					Start: models2.Coordinate{
 						X: 4,
 						Y: 0,
 					},
-					Target: models.Coordinate{
+					Target: models2.Coordinate{
 						X: 4,
 						Y: 4,
 					},
-					Obstacles: []models.Obstacles{
+					Obstacles: []models2.Obstacles{
 						{X1: 1, X2: 4, Y1: 2, Y2: 3},
 					},
 				},
 				{
 					GridLength: 3,
 					GridWidth:  3,
-					Start: models.Coordinate{
+					Start: models2.Coordinate{
 						X: 0,
 						Y: 0,
 					},
-					Target: models.Coordinate{
+					Target: models2.Coordinate{
 						X: 2,
 						Y: 2,
 					},
-					Obstacles: []models.Obstacles{
+					Obstacles: []models2.Obstacles{
 						{X1: 1, X2: 1, Y1: 0, Y2: 2},
 						{X1: 0, X2: 2, Y1: 1, Y2: 1},
 					},
