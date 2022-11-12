@@ -15,6 +15,7 @@ run:
   skip-dirs:
     - doc
     - build
+    - vendor
 
 # output configuration options
 output:
