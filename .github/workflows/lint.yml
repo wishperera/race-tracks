@@ -14,7 +14,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Install webp
+        run : sudo apt-get install libwebp-dev
+
       - name: go lint
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.49.0
+          version: v1.50.1
