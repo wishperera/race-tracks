@@ -1,0 +1,20 @@
+name: lint
+
+on:
+  push:
+    branches-ignore:
+      - 'master'
+    tags-ignore:
+      - '**' # all tags
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: go lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.45.2
