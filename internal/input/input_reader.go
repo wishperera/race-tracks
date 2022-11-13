@@ -17,6 +17,7 @@ type Reader struct {
 	log log.Logger
 }
 
+// NewReader : returns new instance of *Reader
 func NewReader(logger log.Logger) (*Reader, error) {
 	if logger == nil {
 		return nil, errors.New("param log cannot be empty")
