@@ -1,4 +1,5 @@
 # race-tracks
+![Coverage](https://img.shields.io/badge/Coverage-94.9%25-brightgreen)
 Race Tracks On 2D matrix
 
 #### Problem Description
