@@ -1,12 +1,15 @@
 package models
 
+// Grid : represents the board the hopper is moving on
 type Grid struct {
 	length    int
 	width     int
 	obstacles map[int]map[int]bool
-	visited   map[int]map[int]bool
+	visited   map[int]map[int]bool // visited is a map of all visited nodes during a minimum hop count search
 }
 
+// Obstacles : represent the boundaries for obstacles.
+// all cells with coordinates (x,y) such that  X1 <= x <= X2 and Y1 <= y <= Y2 qualify as obstacles
 type Obstacles struct {
 	X1 int
 	X2 int

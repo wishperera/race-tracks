@@ -6,6 +6,7 @@ import (
 	"github.com/wishperera/race-tracks/internal/models"
 )
 
+// Queue : implementation of a queue using list.List
 type Queue struct {
 	list *list.List
 }

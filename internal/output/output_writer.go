@@ -23,6 +23,7 @@ func NewWriter(logger log.Logger) (w *Writer, err error) {
 	}, nil
 }
 
+// WriteOutput : transforms and writes the given results as string to an output stream
 func (w *Writer) WriteOutput(results []int, writer io.Writer) (err error) {
 	outputWriter := bufio.NewWriter(writer)
 	resultToWrite := ""
