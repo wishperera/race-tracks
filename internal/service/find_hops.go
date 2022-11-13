@@ -22,6 +22,7 @@ func FindMinimumHops(start, target models2.Coordinate, grid *models2.Grid) (hopC
 			YVelocity: 0,
 		},
 		CurrentPosition: start,
+		Prev:            nil,
 		HopCount:        0,
 	})
 
@@ -29,6 +30,7 @@ func FindMinimumHops(start, target models2.Coordinate, grid *models2.Grid) (hopC
 		temp := hq.Dequeue()
 
 		if isTargetReached(temp.CurrentPosition, target) {
+			temp.PrintPath()
 			return temp.HopCount
 		}
 
@@ -47,6 +49,7 @@ func FindMinimumHops(start, target models2.Coordinate, grid *models2.Grid) (hopC
 				hq.Enqueue(models2.Hop{
 					CurrentPosition: nextPosition,
 					CurrentVelocity: v,
+					Prev:            &temp,
 					HopCount:        temp.HopCount + 1,
 				})
 			}
