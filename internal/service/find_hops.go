@@ -43,7 +43,7 @@ func FindMinimumHops(start, target models2.Coordinate, grid *models2.Grid) (hopC
 				continue
 			}
 
-			if grid.IsInside(nextPosition) && !grid.IsBlocked(nextPosition) {
+			if grid.IsInside(nextPosition) && !grid.IsBlocked(nextPosition) && !grid.IsVisited(nextPosition) {
 				hq.Enqueue(models2.Hop{
 					CurrentPosition: nextPosition,
 					CurrentVelocity: v,
