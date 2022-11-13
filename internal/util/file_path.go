@@ -37,7 +37,7 @@ func OpenOutputFile(path string) (f *os.File, err error) {
 		return nil, fmt.Errorf("failed to read output file path due: %w", err)
 	}
 
-	f, err = os.OpenFile(absolutPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, createWriteAppendPermissionLevel)
+	f, err = os.OpenFile(absolutPath, os.O_CREATE|os.O_WRONLY, createWriteAppendPermissionLevel)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open output file due: %w", err)
 	}
