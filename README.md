@@ -91,7 +91,7 @@ the output to a specified text file.
 - To build from source,
   - make sure go version `1.19` or later is installed
   - clone the latest release of the repository to your local machine
-  - run `go build -o build/race-tracks`.This should create a binary under the build folder.
+  - run `go build -o build/race-tracks ./cmd/main.go`.This should create a binary under the build folder.
 
 #### Using the binary 
 
