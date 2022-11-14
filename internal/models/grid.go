@@ -5,7 +5,8 @@ type Grid struct {
 	length    int
 	width     int
 	obstacles map[int]map[int]bool
-	visited   map[int]map[int]bool // visited is a map of all visited nodes during a minimum hop count search
+	// visited is a map of all visited nodes with the same velocity during a minimum hop count search
+	visited map[Coordinate]map[Velocity]bool
 }
 
 // Obstacles : represent the boundaries for obstacles.
@@ -23,7 +24,7 @@ func NewGrid(length, width int, obstacles []Obstacles) *Grid {
 	grid.length = length
 	grid.width = width
 	grid.obstacles = make(map[int]map[int]bool)
-	grid.visited = make(map[int]map[int]bool)
+	grid.visited = make(map[Coordinate]map[Velocity]bool)
 
 	for _, obs := range obstacles {
 		for i := obs.X1; i <= obs.X2; i++ {
@@ -51,16 +52,16 @@ func (g *Grid) IsBlocked(coordinate Coordinate) bool {
 }
 
 // MarkVisited : mark the coordinate as visited
-func (g *Grid) MarkVisited(coordinate Coordinate) {
-	_, ok := g.visited[coordinate.X]
+func (g *Grid) MarkVisited(coordinate Coordinate, velocity Velocity) {
+	_, ok := g.visited[coordinate]
 	if !ok {
-		g.visited[coordinate.X] = make(map[int]bool)
+		g.visited[coordinate] = make(map[Velocity]bool)
 	}
 
-	g.visited[coordinate.X][coordinate.Y] = true
+	g.visited[coordinate][velocity] = true
 }
 
 // IsVisited : returns true if the coordinate has been visited before
-func (g *Grid) IsVisited(coordinate Coordinate) bool {
-	return g.visited[coordinate.X][coordinate.Y]
+func (g *Grid) IsVisited(coordinate Coordinate, velocity Velocity) bool {
+	return g.visited[coordinate][velocity]
 }

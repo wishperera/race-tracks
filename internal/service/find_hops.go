@@ -16,6 +16,7 @@ func FindMinimumHops(start, target models2.Coordinate, grid *models2.Grid) (hopC
 	}
 
 	hq := queue.NewQueue()
+	grid.MarkVisited(start, models2.Velocity{})
 	hq.Enqueue(models2.Hop{
 		CurrentVelocity: models2.Velocity{
 			XVelocity: 0,
@@ -28,22 +29,24 @@ func FindMinimumHops(start, target models2.Coordinate, grid *models2.Grid) (hopC
 	for !hq.Empty() {
 		temp := hq.Dequeue()
 
-		if isTargetReached(temp.CurrentPosition, target) {
-			return temp.HopCount
-		}
-
 		for _, v := range getPossibleVelocities(temp.CurrentVelocity) {
+			// the hopper cannot move if both velocities are zero
+			if v.XVelocity == 0 && v.YVelocity == 0 {
+				continue
+			}
+
 			nextPosition := models2.Coordinate{
 				X: temp.CurrentPosition.X + v.XVelocity,
 				Y: temp.CurrentPosition.Y + v.YVelocity,
 			}
 
-			// the hopper cannot move if both velocities are zero
-			if nextPosition.X == 0 && nextPosition.Y == 0 {
-				continue
-			}
+			if grid.IsInside(nextPosition) && !grid.IsBlocked(nextPosition) && !grid.IsVisited(nextPosition, v) {
+				if isTargetReached(nextPosition, target) {
+					return temp.HopCount + 1
+				}
 
-			if grid.IsInside(nextPosition) && !grid.IsBlocked(nextPosition) && !grid.IsVisited(nextPosition) {
+				grid.MarkVisited(nextPosition, v)
+
 				hq.Enqueue(models2.Hop{
 					CurrentPosition: nextPosition,
 					CurrentVelocity: v,
